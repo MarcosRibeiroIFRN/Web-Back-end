@@ -39,7 +39,11 @@ connection.connect((err)=>{
             if(erro){
                 console.log(erro)
             }else{
-                res.json(linhas);
+                if(linhas.length>0){
+                    res.json(linhas);
+                }else{
+                    res.status(404).send('Registro não localizado')
+                }
             }
         });
     });
