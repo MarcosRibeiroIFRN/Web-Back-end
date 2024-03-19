@@ -1,21 +1,7 @@
 const express = require('express');
-const mysql = require('mysql');
 const routerAluno=express.Router()
-//configuração da conexão com o banco de dados mysql
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password:'',
-    database:'dbbiblioteca'
-});
-connection.connect((err)=>{
-    if(err){
-        console.error('Erro ao conectar ao banco de dados:',err);
-        return;
-    }
-    console.log ('Conectado ao banco de dados MySQL')
+const connection=require('./dbcon.js')
 
-})
 //#region rotas
 
 routerAluno.get('/',(req,res)=>{
@@ -36,7 +22,7 @@ routerAluno.get('/:id',(req,res)=>{
             console.log(erro)
         }else{
             if(linhas.length>0){
-                res.json(linhas);
+                res.json(linhas[0]);
             }else{
                 res.status(404).send('Registro não localizado')
             }
@@ -80,7 +66,7 @@ routerAluno.put('/',(req,res)=>{
     const TxIngresso=req.body.TxIngresso
     const IdCurso=req.body.IdCurso
     res.status(201).send('Aluno cadastrado com sucesso.')
-    const sql = 'UPDATE FROM tbalunmo SET NoAluno=?, TxIngresso=?,IdCurso=? WHERE'
+    const sql = 'UPDATE FROM tbalunmo SET NoAluno=?, TxIngresso=?,IdCurso=? WHERE NuMaticula=?'
     connection.query(sql,[NoAluno,TxIngresso,IdCurso,id],(erro,linhas)=>{
         if(erro){
             console.log(erro);
