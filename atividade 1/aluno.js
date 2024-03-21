@@ -4,13 +4,14 @@ const connection=require('./dbcon.js')
 
 //#region rotas
 
-routerAluno.get('/',(req,res)=>{
-    connection.query('SELECT * FROM tbaluno',(err,rows)=>{
-        if(err){
-            console.error('Erro ao executar a consulta',err);
-            return;
+routerAluno.get('/', (req, res) => {
+    const sql = 'SELECT * FROM tbaluno';
+    connection.query(sql, (erro, linhas) => {
+        if (erro) {
+            console.log(erro);
+        } else {
+            res.json(linhas);
         }
-        res.json(rows);
     });
 });
 
@@ -35,7 +36,7 @@ routerAluno.post('/',(req,res)=>{
     const TxIngresso=req.body.TxIngresso
     const IdCurso=req.body.IdCurso
     res.status(201).send('Aluno cadastrado com sucesso.')
-    const sql = 'INSERT INRO tbaluno(NuMatricula,NoAluno,TxIngresso,IdCurso) values(?,?,?,?)';
+    const sql = `INSERT INTO tbaluno(NuMatricula,NoAluno,TxIngresso,IdCurso) VALUES (?,?,?,?)`;
     connection.query(sql,[NuMatricula,NoAluno,TxIngresso,IdCurso],(erro,linhas)=>{
         if(erro){
             console.log(erro);
